@@ -2,7 +2,6 @@
 
 Parser::Parser(const std::string &filename)
 {
-    std::cout << "Created parser" << std::endl;
     if (!std::filesystem::exists(filename))
         throw std::runtime_error("The file: " + filename + " doesn't exist.");
     _filename = filename;
@@ -11,7 +10,6 @@ Parser::Parser(const std::string &filename)
 
 Parser::~Parser()
 {
-    std::cout << "Destructed parser" << std::endl;
 }
 
 bool Parser::validWord(const std::string &word)
@@ -46,10 +44,16 @@ std::unordered_set<std::string> Parser::getAllWords()
     std::unordered_set<std::string> allWords;
     while (std::getline(_file, line))
     {
+        std::string formatted;
         try
         {
             validWord(line);
-            allWords.insert(line);
+            for (auto &c : line)
+            {
+                formatted += std::toupper(c);
+
+            }
+            allWords.insert(formatted);
         }
         catch (const std::exception &e)
         {

@@ -2,7 +2,6 @@
 #include "../include/Wordle.hpp"
 int main(void)
 {
-
     try
     {
         Wordle wordle;
