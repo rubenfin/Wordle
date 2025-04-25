@@ -2,6 +2,12 @@
 
 Wordle::Wordle() : _p(new Parser("./words/words.txt")), _totalGuesses(0)
 {
+    std::cout << "W   W    OOO    RRRR    DDDD   L      EEEEE\n";
+    std::cout << "W   W   O   O   R   R   D   D  L      E    \n";
+    std::cout << "W W W   O   O   RRRR    D   D  L      EEEE \n";
+    std::cout << "WW WW   O   O   R  R    D   D  L      E    \n";
+    std::cout << "W   W    OOO    R   R   DDDD   LLLLL  EEEEE\n";
+    std::cout << "\n\n" << std::endl;
     parsing();
     loop();
 }
@@ -17,7 +23,7 @@ void Wordle::parsing(void)
     std::cout << "Total amount of words: " << this->_wordsDictionary.size() << "\n" << std::endl;
     // printDictionary();
     setCurrentWord();
-    // printCurrentWord();
+    printCurrentWord();
 }
 
 void Wordle::loop(void)
@@ -34,17 +40,19 @@ void Wordle::loop(void)
             std::cout << "Thank you for playing!" << std::endl; 
             return ;
         }
-            if (!isValidInput(input) || !isWordInDictionary(input))
+        try {
+         _p->validWord(input);
+         isWordInDictionary(input);
+        }
+        catch (const std::exception &e)
         {
-            std::cout << RED << "Invalid input" << RESET << std::endl;
-            std::cout << "input: ";
+            std::cout <<  "input: ";
             continue ;
         }
-
         if (isWordCurrentWord(input))
         {
             printAllGuesses();
-            std::cout << "Congratulations you won!" << std::endl;
+            std::cout << "Congratulations you found the word: " << _currentWord << " in " << _totalGuesses + 1 << " guesses!"<< std::endl;
             return ;
         }
         _guesses[_totalGuesses] = doesWordHaveSameCharacters(input);
@@ -72,20 +80,6 @@ void Wordle::printAllGuesses(void)
     std::cout << std::endl;
 }
 
-bool Wordle::isValidInput(const std::string &input)
-{
-    try
-    {
-        _p->validWord(input);
-    }
-    catch (const std::exception &e)
-    {
-        return false;
-    }
-    return true;
-}
-
-
 bool Wordle::isWordCurrentWord(const std::string& word)
 {
     if (_currentWord != word) { return false;}
@@ -97,26 +91,50 @@ bool Wordle::isWordCurrentWord(const std::string& word)
 std::string Wordle::doesWordHaveSameCharacters(const std::string& word)
 {
     std::string guess;
+    std::vector<bool> matched(_currentWord.size(), false); // Track used letters in the answer
+
+    // First pass: find greens
     for (size_t i = 0; i < word.size(); i++)
     {
         if (_currentWord[i] == word[i])
         {
             guess += GREEN + std::string(1, word[i]) + RESET;
-        }
-        else if (_currentWord.find(word[i]) != std::string::npos)
-        {
-            guess += YELLOW + std::string(1, word[i]) + RESET;
+            matched[i] = true;
         }
         else
-            guess += word[i];
+        {
+            guess += "_"; 
+        }
     }
+
+    for (size_t i = 0; i < word.size(); i++)
+    {
+        if (guess[i] != '_') continue; 
+
+        bool found = false;
+        for (size_t j = 0; j < _currentWord.size(); j++)
+        {
+            if (!matched[j] && word[i] == _currentWord[j])
+            {
+                found = true;
+                matched[j] = true;
+                break;
+            }
+        }
+
+        if (found)
+            guess[i] = YELLOW[0], guess.insert(i + 1, std::string(1, word[i]) + RESET);
+        else
+            guess[i] = word[i];
+    }
+
     return guess;
 }
 
-bool Wordle::isWordInDictionary(const std::string& word)
-{
 
-    return (_wordsDictionary.count(word));
+void Wordle::isWordInDictionary(const std::string& word)
+{
+    _wordsDictionary.count(word) ? 0 : throw std::runtime_error("This word is not in the dictionary");
 }
 
 void Wordle::setCurrentWord(void)

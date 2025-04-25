@@ -25,10 +25,9 @@ public:
     ~Wordle();
 
     std::string doesWordHaveSameCharacters(const std::string& word);
-    bool isValidInput(const std::string &input);
     void setCurrentWord(void);
+    void isWordInDictionary(const std::string& word);
     bool isWordCurrentWord(const std::string& word);
-    bool isWordInDictionary(const std::string& word);
     void printDictionary(void);
     void printCurrentWord(void);
     void printAllGuesses(void);
