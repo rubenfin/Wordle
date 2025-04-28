@@ -90,47 +90,43 @@ bool Wordle::isWordCurrentWord(const std::string& word)
 
 std::string Wordle::doesWordHaveSameCharacters(const std::string& word)
 {
-    std::string guess;
-    std::vector<bool> matched(_currentWord.size(), false); // Track used letters in the answer
-
-    // First pass: find greens
+    std::vector<std::string> guess(5, "_");
+    std::vector<bool> matched(_currentWord.size(), false);
+    
     for (size_t i = 0; i < word.size(); i++)
     {
-        if (_currentWord[i] == word[i])
+        if (word[i] == _currentWord[i])
         {
-            guess += GREEN + std::string(1, word[i]) + RESET;
+            guess[i] = GREEN + std::string(1, word[i]) + RESET;
             matched[i] = true;
         }
-        else
-        {
-            guess += "_"; 
-        }
     }
 
     for (size_t i = 0; i < word.size(); i++)
     {
-        if (guess[i] != '_') continue; 
-
+        if (guess[i] != "_") continue;
         bool found = false;
+
         for (size_t j = 0; j < _currentWord.size(); j++)
         {
-            if (!matched[j] && word[i] == _currentWord[j])
+            if (!matched[i] && word[i] == _currentWord[j])
             {
                 found = true;
-                matched[j] = true;
-                break;
+                matched[i] = true;
             }
         }
-
         if (found)
-            guess[i] = YELLOW[0], guess.insert(i + 1, std::string(1, word[i]) + RESET);
+            guess[i] = YELLOW + std::string(1, word[i]) + RESET;
         else
-            guess[i] = word[i];
+            guess[i] = std::string(1, word[i]);
     }
-
-    return guess;
+    std::string total;
+    for (auto &s : guess)
+    {
+        total += s;
+    }
+    return (total);
 }
-
 
 void Wordle::isWordInDictionary(const std::string& word)
 {
