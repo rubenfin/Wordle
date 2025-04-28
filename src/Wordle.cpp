@@ -23,7 +23,7 @@ void Wordle::parsing(void)
     std::cout << "Total amount of words: " << this->_wordsDictionary.size() << "\n" << std::endl;
     // printDictionary();
     setCurrentWord();
-    printCurrentWord();
+    // printCurrentWord();
 }
 
 void Wordle::loop(void)
@@ -46,6 +46,7 @@ void Wordle::loop(void)
         }
         catch (const std::exception &e)
         {
+            std::cerr << RED << e.what() << RESET << std::endl;
             std::cout <<  "input: ";
             continue ;
         }
@@ -60,7 +61,7 @@ void Wordle::loop(void)
         printAllGuesses();
         if (_totalGuesses == 5)
         {
-            std::cout << RED << "GAME OVER !" << RESET << std::endl;
+            std::cout << RED << "GAME OVER ! The word was: "<< _currentWord << RESET << std::endl;
             return;
         }
         std::cout << "input: ";
@@ -109,10 +110,10 @@ std::string Wordle::doesWordHaveSameCharacters(const std::string& word)
 
         for (size_t j = 0; j < _currentWord.size(); j++)
         {
-            if (!matched[i] && word[i] == _currentWord[j])
+            if (!matched[j] && word[i] == _currentWord[j])
             {
                 found = true;
-                matched[i] = true;
+                matched[j] = true;
             }
         }
         if (found)
