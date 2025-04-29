@@ -2,12 +2,16 @@
 
 Wordle::Wordle() : _p(new Parser("./words/words.txt")), _totalGuesses(0)
 {
+    std::cout << "\n" << std::endl;
+
     std::cout << "W   W    OOO    RRRR    DDDD   L      EEEEE\n";
     std::cout << "W   W   O   O   R   R   D   D  L      E    \n";
     std::cout << "W W W   O   O   RRRR    D   D  L      EEEE \n";
     std::cout << "WW WW   O   O   R  R    D   D  L      E    \n";
     std::cout << "W   W    OOO    R   R   DDDD   LLLLL  EEEEE\n";
     std::cout << "\n\n" << std::endl;
+
+    std::cout << "Welcome to Wordle!\n\n" << std::endl;
     parsing();
     loop();
 }
@@ -26,6 +30,14 @@ void Wordle::parsing(void)
     // printCurrentWord();
 }
 
+void makeCapital(std::string &input)
+{
+    for (size_t i = 0; i < input.size(); i++)
+    {
+        input[i] = std::toupper(input[i]);
+    }
+}
+
 void Wordle::loop(void)
 {
     std::string input;
@@ -35,7 +47,8 @@ void Wordle::loop(void)
     while (std::getline(std::cin, input))
     {
         std::cout << std::endl;
-        if (input == "quit" || input == "QUIT")
+        makeCapital(input);
+        if (input == "QUIT")
         {
             std::cout << "Thank you for playing!" << std::endl; 
             return ;
