@@ -57,6 +57,7 @@ std::unordered_set<std::string> Parser::getAllWords()
         }
         catch (const std::exception &e)
         {
+            std::cerr << e.what() << "\n" << std::endl;
         }
     }
     return allWords;
@@ -64,6 +65,5 @@ std::unordered_set<std::string> Parser::getAllWords()
 
 void Parser::error(const std::string &msg)
 {
-    std::cerr << RED << msg << RESET << std::endl;
     throw std::runtime_error(msg);
 }

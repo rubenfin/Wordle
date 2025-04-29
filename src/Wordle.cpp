@@ -46,7 +46,7 @@ void Wordle::loop(void)
         }
         catch (const std::exception &e)
         {
-            std::cerr << RED << e.what() << RESET << std::endl;
+            std::cerr << RED << e.what() << RESET << "\n" << std::endl;
             std::cout <<  "input: ";
             continue ;
         }
