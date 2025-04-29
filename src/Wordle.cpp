@@ -42,7 +42,7 @@ void Wordle::loop(void)
 {
     std::string input;
 
-    // printAllGuesses();
+    printAllGuesses();
     std::cout << "input: ";
     while (std::getline(std::cin, input))
     {
